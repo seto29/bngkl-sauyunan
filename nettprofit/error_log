@@ -1,0 +1,1 @@
+[07-Mar-2021 08:06:18 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jopexid/public_html/subdomain/apis/nettprofit/GetByDate.php on line 47

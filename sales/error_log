@@ -1,0 +1,3 @@
+[07-Mar-2021 08:06:22 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jopexid/public_html/subdomain/apis/sales/GetByDate.php on line 42
+[07-Mar-2021 08:08:13 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jopexid/public_html/subdomain/apis/sales/GetByDate.php on line 42
+[07-Mar-2021 08:08:31 UTC] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home/jopexid/public_html/subdomain/apis/sales/GetByDate.php on line 42
