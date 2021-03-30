@@ -17,17 +17,20 @@ $headers = apache_request_headers();
             isset($obj->nama) && !empty($obj->nama)
             && isset($obj->kode) && !empty($obj->kode)
             && isset($obj->alamat) && !empty($obj->alamat)
+            && isset($obj->harga) && !empty($obj->harga)
+            && isset($obj->plafon) && !empty($obj->plafon)
             ){
-            $nama = $obj -> nama;
+            $nama = strtoupper($obj -> nama);
             $kode = $obj->kode;
             $alamat = $obj->alamat;
             $kota = $obj->kota;
             $telepon = $obj->telepon;
             $fax = $obj->fax;
-            $contact = $obj->contact;
-            $hp = $obj->hp;
+            $harga = $obj->harga;
+            $plafon = $obj->plafon;
+            $kode_sales = $obj->kode_sales;
             
-            $insert = mysqli_query($db_conn,"UPDATE `supplier` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax',`contact`='$contact',`hp`='$hp' WHERE `kode`='$kode'");
+            $insert = mysqli_query($db_conn,"UPDATE `pelanggan` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax',`harga`='$harga',`plafon`='$plafon',`kode_sales`='$kode_sales' WHERE `kode`='$kode'");
             if ($insert) {
                 echo json_encode(["success" => 1, "msg"=>"Data Berhasil Diubah"]);
             } else {

@@ -14,22 +14,15 @@ $headers = apache_request_headers();
         }
 
         if(
-            isset($obj->nama) && !empty($obj->nama)
+            isset($obj->value) && !empty($obj->value)
             && isset($obj->kode) && !empty($obj->kode)
-            && isset($obj->alamat) && !empty($obj->alamat)
             ){
-            $nama = $obj -> nama;
-            $kode = $obj->kode;
-            $alamat = $obj->alamat;
-            $kota = $obj->kota;
-            $telepon = $obj->telepon;
-            $fax = $obj->fax;
-            $contact = $obj->contact;
-            $hp = $obj->hp;
+            $value = strtoupper($obj -> value);
+            $kode = strtoupper($obj -> kode);
             
-            $insert = mysqli_query($db_conn,"UPDATE `supplier` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax',`contact`='$contact',`hp`='$hp' WHERE `kode`='$kode'");
+            $insert = mysqli_query($db_conn, "UPDATE `nilai` SET `$kode`='$value' WHERE `kode`='persen_jual'");
             if ($insert) {
-                echo json_encode(["success" => 1, "msg"=>"Data Berhasil Diubah"]);
+                echo json_encode(["success" => 1, "msg"=>"Data Berhasil DIubah"]);
             } else {
                 echo json_encode(["success" => 0, "msg"=>"Kesalah Sistem, Gagal Memasukkan Data"]);
             }

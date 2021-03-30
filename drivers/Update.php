@@ -18,16 +18,14 @@ $headers = apache_request_headers();
             && isset($obj->kode) && !empty($obj->kode)
             && isset($obj->alamat) && !empty($obj->alamat)
             ){
-            $nama = $obj -> nama;
+            $nama = strtoupper($obj -> nama);
             $kode = $obj->kode;
             $alamat = $obj->alamat;
             $kota = $obj->kota;
             $telepon = $obj->telepon;
             $fax = $obj->fax;
-            $contact = $obj->contact;
-            $hp = $obj->hp;
             
-            $insert = mysqli_query($db_conn,"UPDATE `supplier` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax',`contact`='$contact',`hp`='$hp' WHERE `kode`='$kode'");
+            $insert = mysqli_query($db_conn,"UPDATE `sopir` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax' WHERE `kode`='$kode'");
             if ($insert) {
                 echo json_encode(["success" => 1, "msg"=>"Data Berhasil Diubah"]);
             } else {

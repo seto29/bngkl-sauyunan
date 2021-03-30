@@ -16,11 +16,13 @@ $headers = apache_request_headers();
         if(
             isset($obj->nama) && !empty($obj->nama)
             && isset($obj->alamat) && !empty($obj->alamat)
+            && isset($obj->harga) && !empty($obj->harga)
+            && isset($obj->plafon) && !empty($obj->plafon)
             ){
-            $nama = $obj -> nama;
+            $nama = strtoupper($obj -> nama);
             $init = $nama[0];
             $kode = $nama[0];
-            $getCode = mysqli_query($db_conn, "SELECT kode FROM `supplier` WHERE nama LIKE '$init%' ORDER BY kode DESC LIMIT 1");
+            $getCode = mysqli_query($db_conn, "SELECT kode FROM `pelanggan` WHERE nama LIKE '$init%' ORDER BY kode DESC LIMIT 1");
             if (mysqli_num_rows($getCode) > 0) {
                 $res = mysqli_fetch_all($getCode, MYSQLI_ASSOC);
                 $i =(int) substr($res[0]['kode'],3) +1;
@@ -42,10 +44,11 @@ $headers = apache_request_headers();
             $kota = $obj->kota;
             $telepon = $obj->telepon;
             $fax = $obj->fax;
-            $contact = $obj->contact;
-            $hp = $obj->hp;
+            $harga = $obj->harga;
+            $plafon = $obj->plafon;
+            $kode_sales = $obj->kode_sales;
             
-            $insert = mysqli_query($db_conn, "INSERT INTO `supplier`(`kode`, `nama`, `alamat`, `kota`, `telepon`, `fax`, `contact`, `hp`) VALUES ('$kode','$nama','$alamat','$kota','$telepon','$fax','$contact','$hp')");
+            $insert = mysqli_query($db_conn, "INSERT INTO `pelanggan`(`kode`, `nama`, `alamat`, `kota`, `telepon`, `fax`, `harga`, `plafon`, `kode_sales`) VALUES ('$kode','$nama', '$alamat', '$kota', '$telepon', '$fax', '$harga', '$plafon', '$kode_sales')");
             if ($insert) {
                 echo json_encode(["success" => 1, "msg"=>"Data Berhasil Dimasukkan"]);
             } else {

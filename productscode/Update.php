@@ -13,7 +13,7 @@ if(gettype($obj)=="NULL"){
     $obj = json_decode(json_encode($_POST));
 }
 $kode = strtoupper($obj->kode);
-$nama = $obj->nama;
+$nama = strtoupper($obj->nama);
 $komisi = $obj->komisi;
 $nilai_minimum = $obj->nilai_minimum;
 

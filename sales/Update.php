@@ -12,17 +12,27 @@ $headers = apache_request_headers();
         if(gettype($obj)=="NULL"){
             $obj = json_decode(json_encode($_POST));
         }
-        $id = $obj -> id;
-        $sku = $obj -> sku;
-        $cID = $obj->cID;
-        $name = $obj->name;
-        $cogs = $obj->cogs;
-        $price = $obj->price;
-        $stock = $obj->stock;
-        $insert = mysqli_query($db_conn, "UPDATE products SET sku = '$sku', category_id='$cID', name='$name', cogs='$cogs', price='$price', stock='$stock', updated_at = NOW()  WHERE id = '$id'");
-        if ($insert) {
-            echo json_encode(["success" => 1]);
-        } else {
-            echo json_encode(["success" => 0]);
+
+        if(
+            isset($obj->nama) && !empty($obj->nama)
+            && isset($obj->kode) && !empty($obj->kode)
+            && isset($obj->alamat) && !empty($obj->alamat)
+            ){
+            $nama = $obj -> nama;
+            $kode = $obj->kode;
+            $alamat = $obj->alamat;
+            $kota = $obj->kota;
+            $telepon = $obj->telepon;
+            $fax = $obj->fax;
+            
+            $insert = mysqli_query($db_conn,"UPDATE `sales` SET `nama`='$nama',`alamat`='$alamat',`kota`='$kota',`telepon`='$telepon',`fax`='$fax' WHERE `kode`='$kode'");
+            if ($insert) {
+                echo json_encode(["success" => 1, "msg"=>"Data Berhasil Diubah"]);
+            } else {
+                echo json_encode(["success" => 0, "msg"=>"Kesalah Sistem, Gagal Memasukkan Data"]);
+            }
+        }else{
+            echo json_encode(["success" => 0, "msg"=>"Mohon Lengkapi Data Wajib"]);
         }
+
 ?>

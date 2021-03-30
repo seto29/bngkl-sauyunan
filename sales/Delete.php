@@ -12,11 +12,20 @@ $headers = apache_request_headers();
         if(gettype($obj)=="NULL"){
             $obj = json_decode(json_encode($_POST));
         }
-        $id = $obj -> id;
-            $sqlDelete = mysqli_query($db_conn,"UPDATE sales SET deleted = 1 WHERE id='$id'");
-        if($sqlDelete){
-            echo json_encode(["success" => 1]);
+
+        if(
+            isset($obj->kode) && !empty($obj->kode)
+            ){
+            $kode = $obj->kode;
+            
+            $insert = mysqli_query($db_conn,"UPDATE `sales` SET `deleted_at`=NOW() WHERE `kode`='$kode'");
+            if ($insert) {
+                echo json_encode(["success" => 1, "msg"=>"Data Berhasil Diubah"]);
+            } else {
+                echo json_encode(["success" => 0, "msg"=>"Kesalah Sistem, Gagal Memasukkan Data"]);
+            }
         }else{
-            echo json_encode(["success" => 0]);
+            echo json_encode(["success" => 0, "msg"=>"Mohon Lengkapi Data Wajib"]);
         }
+
 ?>
