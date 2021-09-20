@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require '../db_connection.php';
 
 
-$menu = mysqli_query($db_conn, "SELECT * FROM `pelanggan` WHERE deleted_at IS NULL ORDER BY kode ASC");
+$menu = mysqli_query($db_conn, "SELECT p.*, s.nama as nama_sales FROM pelanggan p JOIN sales s ON s.kode=p.kode_sales WHERE p.deleted_at IS NULL ORDER BY p.kode ASC");
 
 if (mysqli_num_rows($menu) > 0) {
     $all = mysqli_fetch_all($menu, MYSQLI_ASSOC);

@@ -12,9 +12,9 @@ $headers = apache_request_headers();
         if(gettype($obj)=="NULL"){
             $obj = json_decode(json_encode($_POST));
         }
-        $id = $obj -> id;
+        $kode = $obj -> kode;
 
-        $delete = mysqli_query($db_conn, "UPDATE employees SET deleted = 1  WHERE id = '$id'");
+        $delete = mysqli_query($db_conn, "UPDATE user SET deleted_at = NOW()  WHERE kode = '$kode'");
         if ($delete) {
             echo json_encode(["success" => 1]);
         } else {

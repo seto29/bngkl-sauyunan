@@ -12,15 +12,19 @@ $headers = apache_request_headers();
         if(gettype($obj)=="NULL"){
             $obj = json_decode(json_encode($_POST));
         }
-        $id = $obj -> id;
-        $name = $obj->name;
-        $email = $obj->email;
-        $roleID = $obj->roleID;
+        $nama = strtoupper($obj -> nama);
+        $alamat = $obj->alamat;
+            $kota = $obj->kota;
+            $telepon = $obj->telepon;
+            $fax = $obj->fax;
+            $login = $obj->login;
+            $password = $obj->password;
+            $kode = $obj->kode;
         if(isset($obj->password) && !empty($obj->password)){
             $password = md5($obj->password);
-            $insert = mysqli_query($db_conn, "UPDATE employees SET name='$name', email='$email', role_id='$roleID', password='$password', updated_at = NOW()  WHERE id = '$id'");
+            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',password='$password',telepon='$telepon',alamat='$alamat',alamat='$alamat'  WHERE kode = '$kode'");
         }else{
-            $insert = mysqli_query($db_conn, "UPDATE employees SET name='$name', email='$email', role_id='$roleID', updated_at = NOW()  WHERE id = '$id'");
+            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',telepon='$telepon',alamat='$alamat',alamat='$alamat'  WHERE kode = '$kode'");
         }
         if ($insert) {
             echo json_encode(["success" => 1]);

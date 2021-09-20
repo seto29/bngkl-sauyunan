@@ -11,7 +11,7 @@ $obj = json_decode(file_get_contents("php://input"));
 if(gettype($obj)=="NULL"){
     $obj = json_decode(json_encode($_POST));
 }
-$username = $obj->username;
+$username = strtoupper($obj->username);
 $password = $obj->password;
 $newPassword = md5($password);
 $menu = mysqli_query($db_conn, "SELECT * FROM `user` WHERE login='$username' AND password='$newPassword'");

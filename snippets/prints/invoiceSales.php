@@ -155,38 +155,41 @@
             }
             $id = $_GET['id'];
             
-            $transaksi = mysqli_query($db_conn, "SELECT sales.code, sales.created_at, shops.name FROM sales JOIN shops ON sales.shop_id=shops.id JOIN salesdetails ON salesdetails.sales_id=sales.id JOIN products on products.id=salesdetails.product_id WHERE sales.id='$id' AND sales.deleted!=1 AND salesdetails.deleted!=1");
+            $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi, kode_barang, part_number, nama_barang, merk, nama_pelanggan, alamat_pelanggan, kota, telepon, nama_sales, harga_jual,qty, total_harga_jual, tanggal_jual FROM penjualan WHERE kode_transaksi='$id'");
             $code = "";
             $date = "";
             $sname = "";
+            $data = "";
             while($row=mysqli_fetch_assoc($transaksi)){
-                $code = $row['code'];
-                $sname = $row['name'];
-                $date = tgl_indo(date("Y-m-d", strtotime($row['created_at'])));
+                $data = $row;
+                $code = $row['kode_transaksi'];
+                $sname = $row['nama_sales'];
+                $date = tgl_indo(date("Y-m-d", strtotime($row['tanggal_jual'])));
             }
         ?>
     <div   style="display: flex;padding: 5px 10px 0 10px;">
         <div style="width: 100%;padding-right: 10px;" class="col-md-16">
             <div class="row">
-                <div style="width: 20%;">
-                    <h1 style="margin-top: 65px;font-size: 40px; padding-left: 10px;">JOPEX</h1>
+            
+            <div  style="width: 100%;margin-top: 45px;text-align: center;">
+            <h3>
+            Faktur Penjualan
+            </h3>
+            </div>
+            </div>
+            <div class="row">
+                <div  style="width: 50%;">
+                    <div>
+                        <b style="font-size: 15px;">No. Faktur : <?php echo $code;?></b>
+                        <p style="font-size: 15px;">Tanggal : <?php echo $date;?></p>
+                        <p style="font-size: 15px;">Sales : <?php echo $sname;?></p>
+                    </div>
                 </div>
-                <div style="width: 50%;">
-                    <h5 style="font-size: 20px;margin-bottom: 15px;margin-top: 45px;">jopex.id</h5>
-
-                    <p style="font-size: 15px;margin: 0;padding: 0;">Panorama Blok D2 No.18-19</p>
-
-                    <p style="font-size: 15px;margin: 0;padding-top: 0px;;">Purwakarta, Jawa Barat</p>
-
-                    <p style="font-size: 15px;margin: 0;padding-top: 0px;;">082216772829</p>
-                    <p style="font-size: 15px;margin: 0;padding-top: 0px;;">www.jopex.id</p>
-                    <br>
-                </div>
-                <div  style="width: 30%;">
-                    <div class="" style="margin-top: 45px;text-align: end;">
-                        <b style="font-size: 15px;"><?php echo $code;?></b>
-                        <p style="font-size: 15px;"><?php echo $date;?></p>
-                        <p style="font-size: 15px;margin: 0;padding-top: 0px;;">Kpd yth: <?php echo $sname;?></p>
+                <div  style="width: 50%;text-align:end;">
+                    <div>
+                        <b style="font-size: 15px;">Pembeli : <?php echo $data['nama_pelanggan'];?></b>
+                        <p style="font-size: 15px;">Alamat : <?php echo $data['alamat_pelanggan'];?>, <?php echo $data['kota'];?></p>
+                        <p style="font-size: 15px;">Telepon : <?php echo $data['telepon'];?></p>
                     </div>
                 </div>
             </div>
@@ -199,8 +202,17 @@
                     <th style="border: 1px solid black;" class="text-left">
                         Jumlah
                     </th>
+                    <th style="border: 1px solid black;" class="text-left">
+                        Kode Brg.
+                    </th>
+                    <th style="border: 1px solid black;" class="text-left">
+                        Part Number
+                    </th>
                     <th style="border: 1px solid black;" class="text-left" colspan="4">
                        Nama Barang
+                    </th>
+                    <th style="border: 1px solid black;" class="text-left">
+                        Merk
                     </th>
                     <th style="border: 1px solid black;" class="text-left">
                         Harga Satuan
@@ -211,65 +223,37 @@
                 </tr>
                 <tbody>
                 <?php
-                    $transaksi = mysqli_query($db_conn, "SELECT sales.code, sales.created_at, salesdetails.unit_price, salesdetails.qty, products.name FROM  sales JOIN salesdetails ON salesdetails.sales_id=sales.id JOIN products on products.id=salesdetails.product_id WHERE sales.id='$id' AND sales.deleted!=1 AND salesdetails.deleted!=1");
+                    $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi, kode_barang, part_number, nama_barang, merk, nama_pelanggan, alamat_pelanggan, kota, telepon, nama_sales, harga_jual,qty, total_harga_jual, tanggal_jual FROM penjualan WHERE kode_transaksi='$id'");
                     $tot = 0;
                         $totQty=0;
                     $i = 1;
                     while($row=mysqli_fetch_assoc($transaksi)){
-                        echo '<tr><td style="border: 1px solid black;" class="text-left">'.$i.'</td><td style="border: 1px solid black;" class="text-left">'.$row['qty'].'</td><td style="border: 1px solid black;"  colspan="4">'.$row['name'].'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['unit_price']).'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['qty']*$row['unit_price']).'</td></tr>';
-                        $tot +=$row['qty']*$row['unit_price'];
+                        echo '<tr><td style="border: 1px solid black;" class="text-left">'.$i.'</td><td style="border: 1px solid black;" class="text-left">'.$row['qty'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['kode_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['part_number'].'</td><td style="border: 1px solid black;"  colspan="4">'.$row['nama_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['merk'].'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['harga_jual']).'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['qty']*$row['harga_jual']).'</td></tr>';
+                        $tot +=$row['qty']*$row['harga_jual'];
                         $i+=1;
                         $totQty += $row['qty'];
                     }
                     ?>
                     <tr>
-                        <td colspan="6" style="text-align: left;"> </td>
+                        <td colspan="9" style="text-align: left;"> </td>
                         <td colspan="1" style="text-align: left;"><b>Jumlah Jenis Barang</b></td>
                         <td style="border: 1px solid black;"><b><?php echo $i-1; ?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="6" style="text-align: left;"> </td>
+                        <td colspan="9" style="text-align: left;"> </td>
                         <td colspan="1" style="text-align: left;"><b>Jumlah Barang</b></td>
                         <td style="border: 1px solid black;"><b><?php echo $totQty; ?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="6" style="text-align: left;"> </td>
+                        <td colspan="9" style="text-align: left;"> </td>
                         <td colspan="1" style="text-align: left;"><b>Jumlah Rp.</b></td>
                         <td style="border: 1px solid black;"><b><?php echo rupiah($tot); ?></b></td>
                     </tr>
                 
                 </tbody>
             </table>
-            <br >
-            <table  width="94%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <?php
-                        $transaksi = mysqli_query($db_conn, "SELECT sales.notes FROM  sales WHERE sales.id='$id' AND sales.deleted!=1 ");
-                        $j = 0;
-                        while($row=mysqli_fetch_assoc($transaksi)){
-                            echo '<td width="65%" rowspan="3" align="center" valign="top"><h4>* '.$row['notes'].'</h4></td>';
-                            $j+=1;
-                        }
-                        if($j==0){
-                            echo '<td width="65%" rowspan="3" align="center" valign="top"><strong class="asd"> &nbsp;<br></strong></td>';
-                        }
-                    ?>
-                    <td width="19%" rowspan="3" valign="top"><strong class="asd"> &nbsp;<br></strong></td>
-                    <td width="16%" valign="top"><h4 style="margin-bottom: 0;text-align:center">Penerima
-                    </h4></td>
-                </tr>
-
-            </table>
-            <table style="margin-top:2cm;" width="94%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td width="65%" rowspan="3" align="center" valign="top"><strong class="asd"> &nbsp;<br></strong></td>
-                    <td width="19%" rowspan="3" valign="top"><strong class="asd"> &nbsp;<br></strong></td>
-                    <td width="16%" valign="top"><h4 style="margin-bottom: 0;text-align:center">
-                        <span style="text-decoration: dashed; padding-left: 100%;color: #000; border-bottom: 1px solid black;"></span>
-                    </h4></td>
-                </tr>
-
-            </table>
+            <br/>
+            <br/>
         </div>
 
     </div>

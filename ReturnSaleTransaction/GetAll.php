@@ -8,7 +8,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require '../db_connection.php';
 
-
 $menu = mysqli_query($db_conn, "SELECT * FROM `retur_penjualan` ");
 
 $resOA = array();

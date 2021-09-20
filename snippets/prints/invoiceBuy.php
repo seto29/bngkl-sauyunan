@@ -155,16 +155,14 @@
             }
             $id = $_GET['id'];
             
-            $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi, kode_barang, part_number, nama_barang, merk, nama_pelanggan, alamat_pelanggan, kota, telepon, nama_sales, harga_jual,qty, total_harga_jual, tanggal_jual FROM penjualan WHERE kode_transaksi='$id'");
+            $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi,nama_supplier, qty, kode_barang, part_number, nama_barang, merk, harga_beli, total_harga_beli,tanggal_beli FROM `pembelian` WHERE kode_transaksi='$id'");
             $code = "";
             $date = "";
             $sname = "";
-            $data = "";
             while($row=mysqli_fetch_assoc($transaksi)){
-                $data = $row;
                 $code = $row['kode_transaksi'];
-                $sname = $row['nama_sales'];
-                $date = tgl_indo(date("Y-m-d", strtotime($row['tanggal_jual'])));
+                $sname = $row['nama_supplier'];
+                $date = tgl_indo(date("Y-m-d", strtotime($row['tanggal_beli'])));
             }
         ?>
     <div   style="display: flex;padding: 5px 10px 0 10px;">
@@ -173,7 +171,7 @@
             
             <div  style="width: 100%;margin-top: 45px;text-align: center;">
             <h3>
-            Surat Jalan
+            Faktur Pembelian
             </h3>
             </div>
             </div>
@@ -182,14 +180,7 @@
                     <div>
                         <b style="font-size: 15px;">No. Faktur : <?php echo $code;?></b>
                         <p style="font-size: 15px;">Tanggal : <?php echo $date;?></p>
-                        <p style="font-size: 15px;">Sales : <?php echo $sname;?></p>
-                    </div>
-                </div>
-                <div  style="width: 50%;text-align:end;">
-                    <div>
-                        <b style="font-size: 15px;">Pembeli : <?php echo $data['nama_pelanggan'];?></b>
-                        <p style="font-size: 15px;">Tujuan : <?php echo $data['alamat_pelanggan'];?>, <?php echo $data['kota'];?></p>
-                        <p style="font-size: 15px;">Telepon : <?php echo $data['telepon'];?></p>
+                        <p style="font-size: 15px;">Supplier : <?php echo $sname;?></p>
                     </div>
                 </div>
             </div>
@@ -214,26 +205,41 @@
                     <th style="border: 1px solid black;" class="text-left">
                         Merk
                     </th>
-                    <!-- <th style="border: 1px solid black;" class="text-left">
+                    <th style="border: 1px solid black;" class="text-left">
                         Harga Satuan
                     </th>
                     <th style="border: 1px solid black;" class="text-left">
                         Total
-                    </th> -->
+                    </th>
                 </tr>
                 <tbody>
                 <?php
-                    $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi, kode_barang, part_number, nama_barang, merk, nama_pelanggan, alamat_pelanggan, kota, telepon, nama_sales, harga_jual,qty, total_harga_jual, tanggal_jual FROM penjualan WHERE kode_transaksi='$id'");
+                    $transaksi = mysqli_query($db_conn, "SELECT kode_transaksi,nama_supplier, qty, kode_barang, part_number, nama_barang, merk, harga_beli, total_harga_beli,tanggal_beli FROM `pembelian` WHERE kode_transaksi='$id'");
                     $tot = 0;
                         $totQty=0;
                     $i = 1;
                     while($row=mysqli_fetch_assoc($transaksi)){
-                        echo '<tr><td style="border: 1px solid black;" class="text-left">'.$i.'</td><td style="border: 1px solid black;" class="text-left">'.$row['qty'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['kode_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['part_number'].'</td><td style="border: 1px solid black;"  colspan="4">'.$row['nama_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['merk'].'</td></tr>';
-                        $tot +=$row['qty']*$row['harga_jual'];
+                        echo '<tr><td style="border: 1px solid black;" class="text-left">'.$i.'</td><td style="border: 1px solid black;" class="text-left">'.$row['qty'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['kode_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['part_number'].'</td><td style="border: 1px solid black;"  colspan="4">'.$row['nama_barang'].'</td><td style="border: 1px solid black;" class="text-left">'.$row['merk'].'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['harga_beli']).'</td><td style="border: 1px solid black;" class="text-left">'.rupiah($row['qty']*$row['harga_beli']).'</td></tr>';
+                        $tot +=$row['qty']*$row['harga_beli'];
                         $i+=1;
                         $totQty += $row['qty'];
                     }
                     ?>
+                    <tr>
+                        <td colspan="9" style="text-align: left;"> </td>
+                        <td colspan="1" style="text-align: left;"><b>Jumlah Jenis Barang</b></td>
+                        <td style="border: 1px solid black;"><b><?php echo $i-1; ?></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="text-align: left;"> </td>
+                        <td colspan="1" style="text-align: left;"><b>Jumlah Barang</b></td>
+                        <td style="border: 1px solid black;"><b><?php echo $totQty; ?></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="text-align: left;"> </td>
+                        <td colspan="1" style="text-align: left;"><b>Jumlah Rp.</b></td>
+                        <td style="border: 1px solid black;"><b><?php echo rupiah($tot); ?></b></td>
+                    </tr>
                 
                 </tbody>
             </table>

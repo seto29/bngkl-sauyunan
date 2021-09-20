@@ -8,12 +8,14 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require '../db_connection.php';
 
+$kode_product = $_GET['kode_product'];
+$menu = mysqli_query($db_conn, "SELECT kode_supplier, nama_supplier, alamat_supplier, kota, telepon FROM `pembelian` WHERE kode_barang='$kode_product' GROUP BY kode_supplier");
 
-$menu = mysqli_query($db_conn, "SELECT bayar_pembelian.*, bayar_pembelian_detail.kode_pembelian, pembelian.nama_supplier, pembelian.jatuh_tempo, pembelian.tanggal_beli FROM `bayar_pembelian` JOIN bayar_pembelian_detail ON bayar_pembelian_detail.kode_transaksi2=bayar_pembelian.kode_transaksi JOIN pembelian ON pembelian.kode_transaksi=bayar_pembelian_detail.kode_pembelian ORDER BY seq DESC");
-
+$resOA = array();
+$res = array();
 if (mysqli_num_rows($menu) > 0) {
     $all = mysqli_fetch_all($menu, MYSQLI_ASSOC);
-    echo json_encode(["success" => 1, "payBuys" => $all]);
+    echo json_encode(["success" => 1, "kode_supplier" => $all]);
 } else {
     echo json_encode(["success" => 0]);
 }

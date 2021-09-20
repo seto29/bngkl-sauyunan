@@ -9,11 +9,18 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require '../db_connection.php';
 
 
-$menu = mysqli_query($db_conn, "SELECT bayar_pembelian.*, bayar_pembelian_detail.kode_pembelian, pembelian.nama_supplier, pembelian.jatuh_tempo, pembelian.tanggal_beli FROM `bayar_pembelian` JOIN bayar_pembelian_detail ON bayar_pembelian_detail.kode_transaksi2=bayar_pembelian.kode_transaksi JOIN pembelian ON pembelian.kode_transaksi=bayar_pembelian_detail.kode_pembelian ORDER BY seq DESC");
+$menu = mysqli_query($db_conn, "SELECT * FROM `penjualan` WHERE kode_kanvas!='' ORDER BY `seq` DESC");
 
 if (mysqli_num_rows($menu) > 0) {
     $all = mysqli_fetch_all($menu, MYSQLI_ASSOC);
-    echo json_encode(["success" => 1, "payBuys" => $all]);
+    $vals = array();
+    foreach ($all as $val) {
+        $data = $val;
+        $data['jatuh_tempo'] = date("d-m-Y",strtotime($val['jatuh_tempo']))." ".$val['jam'];
+        $data['tanggal_jual'] = date("d-m-Y",strtotime($val['tanggal_jual']));
+        array_push($vals,$data);
+    }
+    echo json_encode(["success" => 1, "salesTransactions" => $vals]);
 } else {
     echo json_encode(["success" => 0]);
 }

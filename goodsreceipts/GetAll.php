@@ -9,11 +9,17 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require '../db_connection.php';
 
 
-$menu = mysqli_query($db_conn, "SELECT gr.*, s.name AS sName, e.name as eName FROM goodsreceipts gr JOIN suppliers s ON gr.supplier_id = s.id JOIN employees e ON gr.created_by = e.id  WHERE gr.deleted = 0 ORDER BY gr.id DESC");
+$menu = mysqli_query($db_conn, "SELECT * FROM `barang_masuk` WHERE 	`deleted_at` IS NULL ORDER BY seq DESC");
 
 if (mysqli_num_rows($menu) > 0) {
     $all = mysqli_fetch_all($menu, MYSQLI_ASSOC);
-    echo json_encode(["success" => 1, "goodsreceipts" => $all]);
+    $vals = array();
+    foreach ($all as $val) {
+        $data = $val;
+        $data['tanggal_masuk'] = date("d-m-Y",strtotime($val['tanggal_masuk']));
+        array_push($vals,$data);
+    }
+    echo json_encode(["success" => 1, "goodsreceipts" => $vals]);
 } else {
     echo json_encode(["success" => 0]);
 }

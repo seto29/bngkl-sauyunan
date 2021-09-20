@@ -1,5 +1,4 @@
 <?php
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: access");
 header("Access-Control-Allow-Methods: POST");
@@ -7,34 +6,39 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require '../db_connection.php';
-$headers = apache_request_headers();
         $obj = json_decode(file_get_contents("php://input"));
         if(gettype($obj)=="NULL"){
-            echo(json_encode($_POST));
             $obj = json_decode(json_encode($_POST));
         }
+        $a = strtotime($obj->dod);
+        $tanggal_masuk = date("Ymd", $a);    
         $res = array();
         $don = $obj-> don;
-        $dod = $obj-> dod;
-        $sID = $obj-> sID;
-        $createdBy = $obj-> createdBy;
         $details = json_decode($obj-> details);
-        $sqlGR = mysqli_query($db_conn,"INSERT INTO goodsreceipts (created_by, supplier_id, delivery_order_number, delivery_order_date) VALUES ('$createdBy', '$sID', '$don', '$dod')");
-        if($sqlGR){
-            $lastid = mysqli_insert_id($db_conn);
+        $kode_pembelian = $obj-> kode_pembelian;
+        $kode_supplier = $obj-> kode_supplier;
+        $nama_supplier = $obj-> nama_supplier;
+        $alamat_supplier = $obj-> alamat_supplier;
+        $kota = $obj-> kota;
+        $telepon = $obj-> telepon;
+        $kode_user = $obj-> kode_user;
+        $nama_user = $obj-> nama_user;
+
             for($i=0;$i<count($details);$i++){
-                $pID = $details[$i] -> productID;
+                $kode_barang = $details[$i] -> kode_barang;
+                $part_number = $details[$i] -> part_number;
+                $nama_barang = $details[$i] -> nama_barang;
+                $merk = $details[$i] -> merk;
+                $satuan = $details[$i] -> satuan;
                 $qty = $details[$i] -> qty;
-        		if($pID!==0 && $qty!==0){
-        	        $sqlGRD = mysqli_query($db_conn, "INSERT INTO goodsreceiptdetails(good_receipt_id,product_id,qty,unit_price)VALUES('$lastid','$pID','$qty',0)");
-        	        $sqlUpdate = mysqli_query($db_conn, "UPDATE products SET stock = stock+'$qty' WHERE id = '$pID'");
+        		if($qty!==0){
+                    $sqlGR = mysqli_query($db_conn,"INSERT INTO `barang_masuk`(`nomor_surat_jalan`, `kode_pembelian`, `kode_barang`, `part_number`, `nama_barang`, `merk`, `kode_supplier`, `nama_supplier`, `alamat_supplier`, `kota`, `telepon`, `kode_user`, `nama_user`, `qty`, `satuan`, `tanggal_masuk`) VALUES ('$don', '$kode_pembelian', '$kode_barang', '$part_number', '$nama_barang', '$merk', '$kode_supplier', '$nama_supplier', '$alamat_supplier', '$kota', '$telepon', '$kode_user', '$nama_user', '$qty', '$satuan', '$tanggal_masuk')");
+        	        $sqlUpdate = mysqli_query($db_conn, "UPDATE barang SET qty = qty+'$qty' WHERE kode = '$kode_barang'");
+        	        $sqlUpdate1 = mysqli_query($db_conn, "UPDATE `pembelian` SET `accept`='1' WHERE kode_transaksi='$kode_pembelian'");
         		}
         		else{
         			echo json_encode(["success" => 0, "msg" =>"Mohon Isi Data"]);
         		}
 	        }
-	        echo json_encode(["success" => 1]);
-        }else{
-            echo json_encode(["success" => 0, "msg" =>"Insert Goods Receipt Gagal"]);
-        }
+            echo json_encode(["success" => 1, "msg" =>"Berhasil"]);
 ?>
