@@ -34,16 +34,29 @@ $headers = apache_request_headers();
                 $bank1 = $obj->bank1;
                 $nilai_giro1 = $obj->nilai_giro1;
                 $tanggal_cair1 = $obj->tanggal_cair1;
+                if(isset($obj->tanggal_cair1) && !empty($obj->tanggal_cair1)){
+                    $tanggal_cair1 = strtotime($tanggal_cair1);
+                    $tanggal_cair1 = date('Ymd', $tanggal_cair1);
+                }
+                
                 $no_giro2 = $obj->no_giro2;
                 $bank2 = $obj->bank2;
                 $nilai_giro2 = $obj->nilai_giro2;
                 $tanggal_cair2 = $obj->tanggal_cair2;
+                if(isset($obj->tanggal_cair2) && !empty($obj->tanggal_cair2)){
+                    $tanggal_cair2 = strtotime($tanggal_cair2);
+                    $tanggal_cair2 = date('Ymd', $tanggal_cair2);
+                }
                 $no_giro3 = $obj->no_giro3;
                 $bank3 = $obj->bank3;
                 $nilai_giro3 = $obj->nilai_giro3;
                 $tanggal_cair3 = $obj->tanggal_cair3;
+                if(isset($obj->tanggal_cair3) && !empty($obj->tanggal_cair3)){
+                    $tanggal_cair3 = strtotime($tanggal_cair3);
+                    $tanggal_cair3 = date('Ymd', $tanggal_cair3);
+                }
                 $jumlah_potongan = $obj->jumlah_potongan;
-                $insertSales = mysqli_query($db_conn, "UPDATE `bayar_penjualan` SET `jumlah_bayar`=`jumlah_bayar`+'$jumlah_bayar'+'$jumlah_retur'-'$jumlah_potongan',`sisa`='$sisa'-'$jumlah_bayar'-'$jumlah_potongan'-'$jumlah_retur',`komisi`='$komisi' WHERE kode_transaksi='$kode_transaksi'");
+                $insertSales = mysqli_query($db_conn, "UPDATE `bayar_penjualan` SET `jumlah_bayar`=`jumlah_bayar`+'$jumlah_bayar'+'$jumlah_retur'+'$jumlah_potongan',`sisa`='$sisa'-'$jumlah_bayar'-'$jumlah_potongan'-'$jumlah_retur',`komisi`='$komisi' WHERE kode_transaksi='$kode_transaksi'");
                 
                 $kode1 = "DJ".''.date("ymd");
                 $getCode = mysqli_query($db_conn, "SELECT kode_transaksi FROM `bayar_penjualan_detail` WHERE kode_transaksi LIKE '$kode1%' ORDER BY kode_transaksi DESC LIMIT 1");
@@ -74,7 +87,7 @@ $headers = apache_request_headers();
                 ('$kode1','$kode_transaksi','$kode_penjualan','$kode_pelanggan','$nama_pelanggan',
                 '$alamat_pelanggan','$kota','$telepon','','',
                 '','','$harga','$jumlah_bayar','$jumlah_retur',
-                '','$tanggal_bayar','','','','',
+                '','','','$jumlah_potongan','$sisa'-'$jumlah_bayar'-'$jumlah_potongan'-'$jumlah_retur','',
                 '','','','','$no_giro1',
                 '$bank1','$nilai_giro1','$tanggal_cair1','Tidak','$no_giro2',
                 '$bank2','$nilai_giro2','$tanggal_cair2','Tidak','$no_giro3',

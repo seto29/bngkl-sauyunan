@@ -38,8 +38,8 @@
         $timestamp = strtotime($dateUntil);
         $time2 = date('Ymd', $timestamp);
         $str = date('d-m-Y', strtotime($dateFrom))." Sampai Dengan ". date('d-m-Y', strtotime($dateUntil));
-        // header("Content-Type: application/vnd.ms-excel");
-        // header("Content-Disposition: attachment; filename=Laporan_Kanvas_Transaksi\"$str\".xls");
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=Laporan_Kanvas_Transaksi\"$str\".xls");
         require '../db_connection.php';
         function rupiah($angka)
         {
@@ -55,7 +55,7 @@
             return $date;
         }
 
-        $list = mysqli_query($db_conn, "SELECT * FROM `penjualan` WHERE kode_kanvas!='' AND tanggal_jual>='$time1' AND tanggal_jual<='$time2' ORDER BY `kode_kanvas` DESC");
+        $list = mysqli_query($db_conn, "SELECT * FROM `kanvas` WHERE qty_jual!=0 AND tanggal_ambil>='$time1' AND tanggal_ambil<='$time2' ORDER BY kode_transaksi DESC");
         $i=1;
         $array = array();
         while($row = mysqli_fetch_array($list)){
@@ -82,7 +82,7 @@
         $Gjtjual =0;
         $ci = 0;
         foreach ($array as $value) {
-            if($first==false && $temp!=$value['kode_kanvas'] && $temp1!=$value['kode_transaksi'] ){
+            if($first==false && $temp!=$value['kode_transaksi']  ){
                 ?>
                     
                     <tr >
@@ -101,7 +101,7 @@
         }
         
         $first=false;
-            if($temp!=$value['kode_kanvas'] && $temp1!=$value['kode_transaksi']){
+            if($temp!=$value['kode_transaksi'] ){
                 $jjual =0;
                 $jtjual =0;
                 $c=1;
@@ -121,7 +121,7 @@
                 </td>
                 <td style="width:8%">
                 <b>
-                    K. Transaksi
+                    K. Sales
                 </b>
                 </td>
                 <td style="width:8%">
@@ -176,11 +176,8 @@
                 </td>
             </tr>
             <tr >
-                <td>
-                    Kode Transaksi:
-                </td>
-                <td colspan="12s">
-                    Kd Kanvas: <?php echo $value['kode_kanvas'];?>, Kd Penjualan:<?php echo $value['kode_transaksi'];?>
+                <td colspan="13">
+                    Kode Transaksi: <?php echo $value['kode_transaksi'];?>
                 </td>
             </tr>
             <tr>
@@ -196,7 +193,7 @@
             </td>
             <td>
                 <b>
-                    <?php echo $value['kode_transaksi'];?>
+                    <?php echo $value['kode_sales'];?>
                 </b>
             </td>
             <td>
@@ -268,7 +265,7 @@
             </td>
             <td>
                 <b>
-                    <?php echo $value['kode_transaksi'];?>
+                    <?php echo $value['kode_sales'];?>
                 </b>
             </td>
             <td>
@@ -324,7 +321,7 @@
         </tr>
         <?php
             }
-        $temp=$value['kode_kanvas'];
+        $temp=$value['kode_transaksi'];
         $temp1=$value['kode_transaksi'];
         
         $jjual +=$value['harga_jual'];

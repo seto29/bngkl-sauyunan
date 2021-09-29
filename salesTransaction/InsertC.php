@@ -79,7 +79,7 @@ $headers = apache_request_headers();
             $total_keuntungan = $keuntungan-$komisi;
 
             $insertSales = mysqli_query($db_conn, "INSERT INTO `penjualan`(`kode_transaksi`, `kode_kanvas`, `faktur`, `kode_barang`, `part_number`, `nama_barang`, `merk`, `kode_pelanggan`, `nama_pelanggan`, `alamat_pelanggan`, `kota`, `telepon`, `kode_sales`, `nama_sales`, `kode_user`, `nama_user`, `harga_beli`, `harga_jual`, `qty`, `satuan`, `total_harga_beli`, `total_harga_jual`, `keuntungan`, `komisi`, `total_keuntungan`, `tanggal_jual`, `jatuh_tempo`, `lama_tempo`, `kw`, `nama_kw`, `retur`) VALUES ('$kode','$kode_kanvas','','$kd','$pn','$nama_barang','$merk','$kode_pelanggan','$nama_pelanggan','$alamat_pelanggan','$kota','$telepon','$kode_sales','$nama_sales','$kode_user','$nama_user','$harga_beli','$harga_jual','$qty','$satuan','$total_harga_beli','$total_harga_jual','$keuntungan','$komisi','$total_keuntungan','$strTj','$strJT','$lama_tempo','$kw','$nama_kw','')");
-            $insertSales = mysqli_query($db_conn, "UPDATE `kanvas` SET `qty_jual`='$qty', `tanggal_jual`='$strTj',`jam_jual`='$jam' WHERE kode_transaksi='$kode_kanvas' AND kode_barang='$kd'");
+            $insertSales = mysqli_query($db_conn, "UPDATE `kanvas` SET `qty_jual`='$qty', `tanggal_jual`='$strTj',`jam_jual`='$jam', `harga_jual`='$harga_jual', `total_harga_jual`='$total_harga_jual' WHERE kode_transaksi='$kode_kanvas' AND kode_barang='$kd'");
         }
         
         if($insertSales){
