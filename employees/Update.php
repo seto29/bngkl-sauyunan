@@ -20,11 +20,16 @@ $headers = apache_request_headers();
             $login = $obj->login;
             $password = $obj->password;
             $kode = $obj->kode;
+            $state1 = $obj->state1;
+            $state2 = $obj->state2;
+            $state3 = $obj->state3;
+            $state4 = $obj->state4;
+            $state5 = $obj->state5;
         if(isset($obj->password) && !empty($obj->password)){
             $password = md5($obj->password);
-            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',password='$password',telepon='$telepon',alamat='$alamat',alamat='$alamat'  WHERE kode = '$kode'");
+            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',password='$password',telepon='$telepon',alamat='$alamat',fax='$fax', state1='$state1', state2='$state2', state3='$state3', state4='$state4', state5='$state5'  WHERE kode = '$kode'");
         }else{
-            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',telepon='$telepon',alamat='$alamat',alamat='$alamat'  WHERE kode = '$kode'");
+            $insert = mysqli_query($db_conn, "UPDATE user SET login='$login',nama='$nama',kota='$kota',telepon='$telepon',alamat='$alamat',fax='$fax', state1='$state1', state2='$state2', state3='$state3', state4='$state4', state5='$state5'  WHERE kode = '$kode'");
         }
         if ($insert) {
             echo json_encode(["success" => 1]);

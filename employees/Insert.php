@@ -43,9 +43,14 @@ $headers = apache_request_headers();
             $telepon = $obj->telepon;
             $fax = $obj->fax;
             $login = $obj->login;
-            $password = $obj->password;
+            $state1 = $obj->state1;
+            $state2 = $obj->state2;
+            $state3 = $obj->state3;
+            $state4 = $obj->state4;
+            $state5 = $obj->state5;
+            $password = md5($obj->password);
             
-            $insert = mysqli_query($db_conn, "INSERT INTO `user`(`kode`, `nama`,`login`, `alamat`, `kota`, `telepon`, `fax`, `password`) VALUES ('$kode','$nama','$login','$alamat','$kota','$telepon','$fax', '$password')");
+            $insert = mysqli_query($db_conn, "INSERT INTO `user`(`kode`, `nama`,`login`, `alamat`, `kota`, `telepon`, `fax`, `password`, state1, state2, state3, state4, state5) VALUES ('$kode','$nama','$login','$alamat','$kota','$telepon','$fax', '$password', '$state1', '$state2', '$state3', '$state4', '$state5')");
             if ($insert) {
                 echo json_encode(["success" => 1, "msg"=>"Data Berhasil Dimasukkan"]);
             } else {
